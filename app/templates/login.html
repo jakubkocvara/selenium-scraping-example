@@ -1,0 +1,58 @@
+
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>Login page</title>
+	<meta name="description" content="Login page">
+	<meta name="author" content="Jakub Kocvara">
+
+	<link rel="preconnect" href="ht
+	tps://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+	<style>
+		html, body, input {
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		#formWrapper {
+			width: 500px;
+			margin: 0 auto;
+			margin-top: 300px;
+		}
+
+		#formWrapper form {
+			width: 100%;
+		}
+
+		#formWrapper input {
+    		box-sizing:border-box;
+			width: 100%;
+			text-align: center;
+			margin: 10px 0;
+			padding: 10px;
+		}
+
+		#formWrapper input[type="submit"] {
+			width: 100%;
+			padding: 10px;
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div id="formWrapper">
+		<form action='login' method='POST'>
+		<input type='text' name='username' id='username' placeholder='username'/>
+		<input type='password' name='password' id='password' placeholder='password'/>
+		<input type='hidden' name='csrf_token' value="{{ csrf_token() }}"/>
+		<input type='submit' name='submit'/>
+		</form>
+	</div>
+</body>
+</html>
