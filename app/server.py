@@ -21,51 +21,51 @@ login_manager.init_app(app)
 users = {'user': {'password': 'password'}}
 
 class User(UserMixin):
-    pass
+	pass
 
 
 @login_manager.user_loader
 def user_loader(username):
-    if username not in users:
-        return
+	if username not in users:
+		return
 
-    user = User()
-    user.id = username
-    return user
+	user = User()
+	user.id = username
+	return user
 
 
 @login_manager.request_loader
 def request_loader(request):
-    username = request.form.get('username')
-    if username not in users:
-        return
+	username = request.form.get('username')
+	if username not in users:
+		return
 
-    user = User()
-    user.id = username
+	user = User()
+	user.id = username
 
-    user.is_authenticated = request.form['password'] == users[username]['password']
+	user.is_authenticated = request.form['password'] == users[username]['password']
 
-    return user
+	return user
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('login.html')
+	if request.method == 'GET':
+		return render_template('login.html')
 
-    username = request.form['username']
-    if request.form['password'] == users[username]['password']:
-        user = User()
-        user.id = username
-        login_user(user)
-        return redirect(url_for('index'))
+	username = request.form['username']
+	if request.form['password'] == users[username]['password']:
+		user = User()
+		user.id = username
+		login_user(user)
+		return redirect(url_for('index'))
 
-    return 'Bad login'
+	return 'Bad login'
 
 @app.route('/logout')
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for('index'))
+	logout_user()
+	return redirect(url_for('index'))
 
 @app.route('/')
 @login_required
@@ -86,7 +86,9 @@ def get_data():
 
 	conn = sqlite3.connect('data.db')
 	total = int(pd.read_sql_query('select count(*) from data', conn).iloc[0][0])
-	df = pd.read_sql_query('select * from data limit (?), (?)', conn, params = (page - 1, num_rows,))
+
+	offset = (page - 1) * num_rows
+	df = pd.read_sql_query('select * from data limit (?), (?)', conn, params = (offset, num_rows,))
 	df = df[df.columns[1:].tolist()]
 
 	res = dict(
